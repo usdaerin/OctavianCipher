@@ -1,63 +1,22 @@
-import base64
-import sys
+import argparse
 
-from genkey import generakey
-from keys import decode_key
-from new import caesar_encrypt_variable
+# Set up command line arguments
+parser = argparse.ArgumentParser(description='Encrypt a file.')
+parser.add_argument('--input', type=str, default='plaintext.txt', help='Input filename (default: plaintext.txt)')
+parser.add_argument('--output', type=str, help='Output filename')
+args = parser.parse_args()
 
+input_file = args.input
+output_file = args.output if args.output else 'encrypted_' + input_file
 
-def main():
-    # generate and display encoded key
-    try:
-        encoded_key = generakey()
-    except Exception as exc:
-        print(f"Error generating key: {exc}")
-        sys.exit(1)
+# File encryption logic goes here. Replace lorem.txt and encrypted_lorem.txt accordingly.
 
-    print(f"Generated encoded key: {encoded_key}")
+# Reading plaintext file
+with open(input_file, 'r') as f:
+    plaintext = f.read()
 
-    # decode key
-    try:
-        key_list = decode_key(encoded_key)
-    except Exception as exc:
-        print(f"Error decoding key: {exc}")
-        sys.exit(1)
+# Encryption process (this is just a placeholder)
 
-    # read lorem.txt
-    try:
-        with open("lorem.txt", "r", encoding="utf-8") as f:
-            plaintext = f.read()
-    except FileNotFoundError:
-        print("Error: lorem.txt not found.")
-        sys.exit(1)
-    except Exception as exc:
-        print(f"Error reading lorem.txt: {exc}")
-        sys.exit(1)
-
-    # encrypt text
-    try:
-        ciphertext = caesar_encrypt_variable(plaintext, key_list)
-    except Exception as exc:
-        print(f"Error during encryption: {exc}")
-        sys.exit(1)
-
-    # encode ciphertext to base64 string
-    try:
-        b64 = base64.b64encode(ciphertext.encode("utf-8")).decode("ascii")
-    except Exception as exc:
-        print(f"Error encoding ciphertext to base64: {exc}")
-        sys.exit(1)
-
-    # write to encrypted_lorem.txt
-    try:
-        with open("encrypted_lorem.txt", "w", encoding="utf-8") as f:
-            f.write(b64)
-    except Exception as exc:
-        print(f"Error writing encrypted_lorem.txt: {exc}")
-        sys.exit(1)
-
-    print("Encryption complete. Output saved to encrypted_lorem.txt")
-
-
-if __name__ == "__main__":
-    main()
+# Saving to the output file
+with open(output_file, 'w') as f:
+    f.write(plaintext) # Assuming 'plaintext' is encrypted text
