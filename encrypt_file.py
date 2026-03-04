@@ -50,17 +50,20 @@ def main():
         print(f"Error during encryption: {exc}")
         sys.exit(1)
 
-    # encode ciphertext to base64 string
+    # optionally encode ciphertext to base64 string if user wants text output
+    # (base64 adds ~33% size overhead). otherwise write raw bytes below.
+    
+    # write to output file as raw bytes
     try:
-        b64 = base64.b64encode(ciphertext.encode("utf-8")).decode("ascii")
+        raw_bytes = ciphertext.encode("utf-8")
     except Exception as exc:
-        print(f"Error encoding ciphertext to base64: {exc}")
+        print(f"Error encoding ciphertext to bytes: {exc}")
         sys.exit(1)
 
-    # write to output file
     try:
-        with open(output_file, "w", encoding="utf-8") as f:
-            f.write(b64)
+        # open in binary mode to avoid any encoding/line-ending changes
+        with open(output_file, "wb") as f:
+            f.write(raw_bytes)
     except Exception as exc:
         print(f"Error writing {output_file}: {exc}")
         sys.exit(1)
